@@ -111,7 +111,8 @@ make_docker_images () {
     done
 }
 
-make_docker_images
+# ensure dependencies are installed
+pip install -r requirements.txt
 
 # Python unit tests.
 echo "UNIT TESTS:"
@@ -128,6 +129,13 @@ if [[ ! -x "${COVERAGE_BIN}" ]]; then
   # python3 install.
   COVERAGE_BIN="/usr/bin/coverage2"
 fi
+
+if [[ ! -x "${COVERAGE_BIN}" ]]; then
+    echo "Cannot run tests without an executable $COVERAGE_BIN tool"
+    exit -1
+fi
+
+make_docker_images
 
 set +e
 COVERAGE="${COVERAGE_BIN}
